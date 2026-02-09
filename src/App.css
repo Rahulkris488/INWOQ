@@ -1,0 +1,30 @@
+/* Additional styles that Tailwind can't handle */
+
+/* Radial gradient utility */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Perspective for 3D transforms */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Custom animation for pulse with delay support */
+@keyframes floatOrb {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translate(20px, -20px) scale(1.05);
+    opacity: 0.5;
+  }
+}
+
+.animate-float-orb {
+  animation: floatOrb 15s ease-in-out infinite;
+}
