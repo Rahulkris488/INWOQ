@@ -1,30 +1,379 @@
-/* Additional styles that Tailwind can't handle */
+/* ========================================
+   INWOQ - SHARP ARC GRADIENT + GLASS TEXT
+   Clean, dark, modern, mind-blowing.
+   ======================================== */
 
-/* Radial gradient utility */
-.bg-gradient-radial {
-  background: radial-gradient(circle, var(--tw-gradient-stops));
+/* ---- BASE ---- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Perspective for 3D transforms */
-.perspective-1000 {
-  perspective: 1000px;
+/* ---- DARK BACKGROUND ---- */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #050010;
 }
 
-/* Custom animation for pulse with delay support */
-@keyframes floatOrb {
+/* ---- HERO ARC / PLANET CRESCENT ---- */
+.hero-arc-container {
+  position: absolute;
+  bottom: -5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 70%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* The planet/crescent arc */
+.hero-arc {
+  position: absolute;
+  bottom: -55%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160%;
+  height: 90%;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #0d0620 0%, #110930 40%, #1a0e40 100%);
+  filter: blur(3px);
+  box-shadow:
+    0 -2px 0 rgba(255, 255, 255, 0.5),
+    0 -6px 25px rgba(255, 255, 255, 0.25),
+    0 -20px 80px rgba(139, 92, 246, 0.6),
+    0 -40px 150px rgba(99, 102, 241, 0.35),
+    0 -70px 250px rgba(59, 130, 246, 0.2);
+}
+
+/* Fan rays behind the arc (EternaCloud style) */
+.hero-rays {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(from 180deg at 50% 100%,
+      transparent 110deg,
+      rgba(236, 72, 153, 0.2) 140deg,
+      rgba(168, 85, 247, 0.35) 155deg,
+      rgba(124, 58, 237, 0.45) 165deg,
+      rgba(99, 102, 241, 0.45) 175deg,
+      rgba(59, 130, 246, 0.4) 185deg,
+      rgba(14, 165, 233, 0.35) 195deg,
+      rgba(6, 182, 212, 0.2) 210deg,
+      rgba(59, 130, 246, 0.15) 225deg,
+      transparent 250deg);
+  filter: blur(5px);
+  mask-image: linear-gradient(to top, white 0%, white 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, white 0%, white 60%, transparent 100%);
+}
+
+/* Horizon light line */
+.hero-horizon {
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(139, 92, 246, 0.3) 20%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(59, 130, 246, 0.3) 80%,
+      transparent 100%);
+  box-shadow:
+    0 0 20px rgba(139, 92, 246, 0.4),
+    0 0 60px rgba(99, 102, 241, 0.2);
+}
+
+/* ---- LIQUID GLASS NAVBAR ---- */
+.glass-nav {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 8px 20px;
+  border-radius: 50px;
+  width: 70%;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-nav:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Logo */
+.nav-logo {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  padding: 10px 20px;
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+/* Nav links */
+.nav-link {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 20px;
+  border-radius: 50px;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link:active {
+  transform: scale(0.97);
+}
+
+/* Nav divider */
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* Nav CTA button */
+.nav-cta {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #050010;
+  background: #ffffff;
+  padding: 10px 26px;
+  border-radius: 50px;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+.nav-cta:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.03);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+.nav-cta:active {
+  transform: scale(0.97);
+}
+
+/* ---- GLASS TEXT ---- */
+/* Simple, clean. No strokes, no layers, no pseudo-elements. */
+.glass-text {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 0 60px rgba(255, 255, 255, 0.08);
+}
+
+.glass-text-bright {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 0 80px rgba(255, 255, 255, 0.12);
+}
+
+.glass-text-dim {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.glass-text-muted {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ---- GLASSMORPHISM CARDS ---- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(150%);
+  -webkit-backdrop-filter: blur(40px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(139, 92, 246, 0.15);
+  transform: translateY(-6px);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(139, 92, 246, 0.06);
+}
+
+/* ---- BUTTONS ---- */
+.glass-button {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50px;
+  transition: all 0.4s ease;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.12);
+}
+
+.solid-button {
+  background: #ffffff;
+  color: #050010;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.08);
+}
+
+.solid-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 15px 50px rgba(255, 255, 255, 0.12);
+}
+
+/* ---- FORM INPUTS ---- */
+.glass-input {
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  transition: all 0.4s ease;
+}
+
+.glass-input:focus {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.08);
+}
+
+/* ---- STAT CARDS ---- */
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px 28px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-3px);
+}
+
+/* ---- BENTO ---- */
+.bento-tall {
+  grid-row: span 2;
+}
+
+.bento-wide {
+  grid-column: span 2;
+}
+
+/* ---- BRAND TICKER ---- */
+@keyframes ticker {
+  0% {
+    transform: translateX(0)
+  }
+
+  100% {
+    transform: translateX(-50%)
+  }
+}
+
+.ticker-track {
+  animation: ticker 25s linear infinite;
+}
+
+/* ---- SCROLL INDICATOR ---- */
+@keyframes scroll-bounce {
 
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.3;
+    transform: translateY(0);
+    opacity: .3
   }
 
   50% {
-    transform: translate(20px, -20px) scale(1.05);
-    opacity: 0.5;
+    transform: translateY(8px);
+    opacity: .8
   }
 }
 
-.animate-float-orb {
-  animation: floatOrb 15s ease-in-out infinite;
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ---- SECTION DIVIDER ARC ---- */
+.section-arc {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.section-arc::before {
+  content: '';
+  position: absolute;
+  top: -80%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200%;
+  height: 200%;
+  border-radius: 50%;
+  background: #050010;
+  box-shadow: 0 5px 30px rgba(139, 92, 246, 0.15);
+}
+
+/* ---- NOISE ---- */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
