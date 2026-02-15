@@ -10,39 +10,55 @@ function App() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero entrance - stagger fade up
+      // Hero entrance — stagger fade up
       gsap.fromTo('.hero-reveal',
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 1.2, stagger: 0.12, ease: "power4.out", delay: 0.4 }
       )
 
-      // Nebula glow entrance
-      gsap.fromTo('.nebula-glow',
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 2.5, stagger: 0.3, ease: "power2.out", delay: 0.2 }
+      // Blobs entrance — scale up & fade
+      gsap.fromTo('.blob',
+        { opacity: 0, scale: 0.6 },
+        { opacity: 1, scale: 1, duration: 3, stagger: 0.2, ease: "power2.out", delay: 0.1 }
+      )
+
+      // Glow orb entrance
+      gsap.fromTo('.glow-orb',
+        { opacity: 0, scale: 0 },
+        { opacity: 1, scale: 1, duration: 2, ease: "elastic.out(1, 0.5)", delay: 1 }
       )
 
       // About section fade in
       gsap.fromTo('.about-reveal',
         { opacity: 0, y: 40 },
         {
-          opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out",
+          opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: "power3.out",
           scrollTrigger: { trigger: '.about-section', start: "top 75%", toggleActions: "play none none reverse" }
         }
       )
 
-      // Service cards stagger
+      // About blobs parallax
+      gsap.to('.about-blob--purple', {
+        y: -80,
+        scrollTrigger: { trigger: '.about-section', start: "top bottom", end: "bottom top", scrub: 1 }
+      })
+      gsap.to('.about-blob--blue', {
+        y: 60,
+        scrollTrigger: { trigger: '.about-section', start: "top bottom", end: "bottom top", scrub: 1 }
+      })
+
+      // Service cards — frosted glass stagger
       gsap.fromTo('.svc-reveal',
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 30, backdropFilter: 'blur(0px)' },
         {
-          opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: "power3.out",
+          opacity: 1, y: 0, backdropFilter: 'blur(40px)', duration: 0.8, stagger: 0.15, ease: "power3.out",
           scrollTrigger: { trigger: '.service-cards', start: "top 80%", toggleActions: "play none none reverse" }
         }
       )
 
-      // Bento cards
+      // Bento cards — scale + fade stagger
       gsap.fromTo('.bento-reveal',
-        { opacity: 0, y: 40, scale: 0.97 },
+        { opacity: 0, y: 40, scale: 0.95 },
         {
           opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.08, ease: "power3.out",
           scrollTrigger: { trigger: '.services-bento', start: "top 80%", toggleActions: "play none none reverse" }
@@ -64,11 +80,20 @@ function App() {
         })
       }
 
-      // Contact chars
+      // Wave lines on contact section parallax
+      gsap.fromTo('.wave-lines',
+        { opacity: 0, y: 40 },
+        {
+          opacity: 0.06, y: 0, duration: 1.5,
+          scrollTrigger: { trigger: '.contact-section', start: "top 80%", toggleActions: "play none none reverse" }
+        }
+      )
+
+      // Contact reveal
       gsap.fromTo('.contact-reveal',
         { opacity: 0, y: 30 },
         {
-          opacity: 1, y: 0, duration: 0.8, stagger: 0.08,
+          opacity: 1, y: 0, duration: 0.8, stagger: 0.1,
           scrollTrigger: { trigger: '.contact-section', start: "top 70%", toggleActions: "play none none reverse" }
         }
       )
@@ -77,12 +102,12 @@ function App() {
   }, [])
 
   return (
-    <div ref={containerRef} style={{ background: '#0a0a0a' }}>
+    <div ref={containerRef} style={{ background: '#050510' }}>
       {/* Fixed background + noise */}
       <div className="site-bg" />
       <div className="noise-overlay" />
 
-      {/* ---- NAVBAR ---- */}
+      {/* ---- NAVBAR (liquid glass — image 5) ---- */}
       <nav className="navbar">
         <a href="#" className="nav-logo">
           <span className="nav-logo-dot">N</span>
@@ -105,21 +130,32 @@ function App() {
           HERO SECTION
           ============================================ */}
       <section className="hero-section">
-        {/* Purple nebula glows */}
-        <div className="nebula-glow nebula-glow--primary" />
-        <div className="nebula-glow nebula-glow--secondary" />
-        <div className="nebula-glow nebula-glow--center" />
+        {/* Animated gradient blobs (images 1, 3, 5) */}
+        <div className="blob-canvas">
+          <div className="blob blob--purple" />
+          <div className="blob blob--blue" />
+          <div className="blob blob--teal" />
+          <div className="blob blob--warm" />
+          <div className="blob blob--pink" />
+        </div>
+
+        {/* Glowing orb (image 3 — GC Studio) */}
+        <div className="glow-orb" />
+
+        {/* Sparkle decorations */}
+        <div className="hero-sparkle" />
+        <div className="hero-sparkle-2" />
+        <div className="hero-sparkle-3" />
 
         {/* Badges */}
-        <div className="hero-badges hero-reveal">
+        <div className="hero-badges hero-reveal" style={{ position: 'relative', zIndex: 10 }}>
           <span className="hero-badge">We're hiring</span>
           <span className="hero-badge-dot" />
           <span className="hero-badge">Careers →</span>
         </div>
 
-        {/* Main heading */}
-        <div className="relative">
-          <div className="hero-sparkle" />
+        {/* Main heading — gradient text (image 4 PULSE) */}
+        <div className="relative" style={{ zIndex: 10 }}>
           <h1 className="hero-heading hero-reveal">
             Journey Through the{' '}
             <span className="hero-heading-underline">Universe</span>,{' '}
@@ -127,8 +163,8 @@ function App() {
           </h1>
         </div>
 
-        {/* CTAs */}
-        <div className="hero-ctas hero-reveal">
+        {/* CTAs — liquid glass button (image 5) */}
+        <div className="hero-ctas hero-reveal" style={{ position: 'relative', zIndex: 10 }}>
           <a href="#contact" className="hero-cta-primary">
             Let's talk
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +175,7 @@ function App() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ zIndex: 10 }}>
           <span className="text-[10px] text-white/20 tracking-[0.3em] uppercase">Scroll</span>
           <svg className="w-4 h-4 scroll-indicator" fill="none" stroke="rgba(139,92,246,0.5)" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7" />
@@ -152,16 +188,22 @@ function App() {
         <div className="ticker-track flex gap-16 items-center whitespace-nowrap" style={{ width: 'max-content' }}>
           {[...Array(2)].map((_, rep) =>
             ['TechCorp', 'StartupXYZ', 'InnovateCo', 'FutureAI', 'DigitalEdge', 'CloudNine', 'MetaFlow', 'QuantumLab'].map((brand, i) =>
-              <span key={`${rep}-${i}`} className="text-white/[0.07] text-lg font-bold tracking-[0.2em] uppercase">{brand}</span>
+              <span key={`${rep}-${i}`} className="text-white/[0.06] text-lg font-bold tracking-[0.2em] uppercase">{brand}</span>
             )
           )}
         </div>
       </div>
 
       {/* ============================================
-          ABOUT SECTION
+          ABOUT SECTION — with background blobs
           ============================================ */}
       <section className="about-section" id="about">
+        {/* Background blobs for this section */}
+        <div className="about-blob-canvas">
+          <div className="about-blob about-blob--purple" />
+          <div className="about-blob about-blob--blue" />
+        </div>
+
         <div className="about-container">
           {/* Left column */}
           <div className="about-left">
@@ -181,7 +223,7 @@ function App() {
             </div>
           </div>
 
-          {/* Right column - Service cards */}
+          {/* Right column — Glassmorphism cards (image 2) */}
           <div className="service-cards">
             {[
               {
@@ -230,7 +272,7 @@ function App() {
       </section>
 
       {/* ============================================
-          SERVICES - BENTO GRID
+          SERVICES — GLASSMORPHISM BENTO GRID (image 2)
           ============================================ */}
       <section id="capabilities" className="services-section">
         <div className="services-section-header">
@@ -265,7 +307,7 @@ function App() {
       </section>
 
       {/* ============================================
-          PROCESS - HORIZONTAL SCROLL
+          PROCESS — HORIZONTAL SCROLL
           ============================================ */}
       <section className="process-section">
         <div className="process-container">
@@ -291,9 +333,22 @@ function App() {
       </section>
 
       {/* ============================================
-          CONTACT
+          CONTACT — with wave line pattern (image 4 PULSE)
           ============================================ */}
       <section id="contact" className="contact-section">
+        {/* Wave / topographic lines SVG background (from image 4) */}
+        <svg className="wave-lines" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+          {[...Array(12)].map((_, i) => (
+            <path
+              key={i}
+              d={`M0 ${300 + i * 50} Q360 ${250 + i * 50 + Math.sin(i) * 40} 720 ${300 + i * 50} T1440 ${300 + i * 50}`}
+              stroke="rgba(255,255,255,0.3)"
+              strokeWidth="0.5"
+              fill="none"
+            />
+          ))}
+        </svg>
+
         <div className="contact-inner">
           <h2 className="contact-title contact-reveal">Let's Create Together</h2>
           <p className="contact-subtitle contact-reveal">Ready to bring your vision to life?</p>

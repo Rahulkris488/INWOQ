@@ -10,7 +10,7 @@ html {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #0a0a0a;
+  background: #050510;
   color: #ffffff;
   overflow-x: hidden;
 }
@@ -25,7 +25,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #050510;
 }
 
 ::-webkit-scrollbar-thumb {
