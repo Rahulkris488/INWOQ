@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './App.css'
@@ -8,53 +8,44 @@ gsap.registerPlugin(ScrollTrigger)
 function App() {
   const containerRef = useRef(null)
 
-  // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero entrance - staggered fade up
+      // Hero entrance - stagger fade up
       gsap.fromTo('.hero-reveal',
-        { opacity: 0, y: 60 },
-        { opacity: 1, y: 0, duration: 1.1, stagger: 0.13, ease: "power4.out", delay: 0.3 }
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.2, stagger: 0.12, ease: "power4.out", delay: 0.4 }
       )
 
-      // Hero arc entrance
-      gsap.fromTo('.hero-arc',
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 1.8, ease: "power2.out", delay: 0.2 }
-      )
-      gsap.fromTo('.hero-rays',
-        { opacity: 0 },
-        { opacity: 1, duration: 2, ease: "power2.out", delay: 0.5 }
-      )
-      gsap.fromTo('.hero-horizon',
-        { scaleX: 0, opacity: 0 },
-        { scaleX: 1, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.8 }
+      // Nebula glow entrance
+      gsap.fromTo('.nebula-glow',
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 2.5, stagger: 0.3, ease: "power2.out", delay: 0.2 }
       )
 
-      // Stats count up
-      document.querySelectorAll('.stat-number').forEach(el => {
-        const val = parseInt(el.dataset.value)
-        gsap.fromTo(el, { textContent: 0 }, {
-          textContent: val, duration: 2, snap: { textContent: 1 }, ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 85%" }
-        })
-      })
-
-      // Why Calm - character reveal on scroll
-      gsap.fromTo('.why-calm-char',
-        { color: 'rgba(255,255,255,0.04)' },
+      // About section fade in
+      gsap.fromTo('.about-reveal',
+        { opacity: 0, y: 40 },
         {
-          color: 'rgba(255,255,255,0.88)', stagger: 0.008,
-          scrollTrigger: { trigger: '.why-calm-section', start: "top 70%", end: "top 20%", scrub: 1 }
+          opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: '.about-section', start: "top 75%", toggleActions: "play none none reverse" }
         }
       )
 
       // Service cards stagger
-      gsap.fromTo('.service-card',
-        { opacity: 0, y: 50, scale: 0.97 },
+      gsap.fromTo('.svc-reveal',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: '.service-cards', start: "top 80%", toggleActions: "play none none reverse" }
+        }
+      )
+
+      // Bento cards
+      gsap.fromTo('.bento-reveal',
+        { opacity: 0, y: 40, scale: 0.97 },
         {
           opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.08, ease: "power3.out",
-          scrollTrigger: { trigger: '.services-grid', start: "top 80%", toggleActions: "play none none reverse" }
+          scrollTrigger: { trigger: '.services-bento', start: "top 80%", toggleActions: "play none none reverse" }
         }
       )
 
@@ -63,25 +54,21 @@ function App() {
       const pc = document.querySelector('.process-container')
       if (ps && pc) {
         gsap.to(pc, {
-          x: -(pc.scrollWidth - window.innerWidth), ease: "none",
-          scrollTrigger: { trigger: ps, start: "top top", end: () => `+=${pc.scrollWidth - window.innerWidth}`, pin: true, scrub: 1, anticipatePin: 1 }
+          x: -(pc.scrollWidth - window.innerWidth),
+          ease: "none",
+          scrollTrigger: {
+            trigger: ps, start: "top top",
+            end: () => `+=${pc.scrollWidth - window.innerWidth}`,
+            pin: true, scrub: 1, anticipatePin: 1
+          }
         })
       }
 
-      // Why cards
-      gsap.fromTo('.why-card',
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1, y: 0, duration: 0.7, stagger: 0.1,
-          scrollTrigger: { trigger: '.why-section', start: "top 70%", toggleActions: "play none none reverse" }
-        }
-      )
-
-      // Contact heading chars
-      gsap.fromTo('.contact-char',
+      // Contact chars
+      gsap.fromTo('.contact-reveal',
         { opacity: 0, y: 30 },
         {
-          opacity: 1, y: 0, stagger: 0.025,
+          opacity: 1, y: 0, duration: 0.8, stagger: 0.08,
           scrollTrigger: { trigger: '.contact-section', start: "top 70%", toggleActions: "play none none reverse" }
         }
       )
@@ -89,80 +76,71 @@ function App() {
     return () => ctx.revert()
   }, [])
 
-  const splitChars = (text, cls) =>
-    text.split('').map((c, i) =>
-      <span key={i} className={`inline-block ${cls}`}>{c === ' ' ? '\u00A0' : c}</span>
-    )
-
   return (
-    <div ref={containerRef} className="min-h-screen overflow-x-hidden" style={{ background: '#050010' }}>
-      {/* Fixed dark background */}
+    <div ref={containerRef} style={{ background: '#0a0a0a' }}>
+      {/* Fixed background + noise */}
       <div className="site-bg" />
       <div className="noise-overlay" />
 
-      {/* ---- LIQUID GLASS NAVBAR ---- */}
-      <nav className="glass-nav">
-        <span className="nav-logo">INWOQ</span>
-        <div className="flex items-center gap-2">
-          {['Services', 'Process', 'About', 'Contact'].map(item =>
+      {/* ---- NAVBAR ---- */}
+      <nav className="navbar">
+        <a href="#" className="nav-logo">
+          <span className="nav-logo-dot">N</span>
+          <span>Novae</span>
+        </a>
+
+        <div className="nav-links">
+          {['Work', 'Capabilities', 'About', 'Careers'].map(item => (
             <a key={item} href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
-          )}
+          ))}
         </div>
-        <a href="#contact" className="nav-cta">Get Started</a>
+
+        <a href="#contact" className="nav-cta">
+          Get in touch
+          <span className="nav-cta-arrow">→</span>
+        </a>
       </nav>
 
       {/* ============================================
           HERO SECTION
           ============================================ */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        {/* ARC BACKGROUND */}
-        <div className="hero-arc-container">
-          <div className="hero-rays" />
-          <div className="hero-arc" />
-          <div className="hero-horizon" />
+      <section className="hero-section">
+        {/* Purple nebula glows */}
+        <div className="nebula-glow nebula-glow--primary" />
+        <div className="nebula-glow nebula-glow--secondary" />
+        <div className="nebula-glow nebula-glow--center" />
+
+        {/* Badges */}
+        <div className="hero-badges hero-reveal">
+          <span className="hero-badge">We're hiring</span>
+          <span className="hero-badge-dot" />
+          <span className="hero-badge">Careers →</span>
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 text-center px-6 max-w-[1100px] mx-auto">
-          {/* Main typography */}
-          <h1 className="hero-reveal text-[clamp(3.2rem,8vw,7.5rem)] leading-[1.1] tracking-[-0.03em] mb-10"
-            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-            <span className="glass-text-bright font-light block">Crafting</span>
-            <span className="block">
-              <span className="glass-text-dim font-light italic">(your) </span>
-              <span className="glass-text-bright font-light">digital.</span>
-            </span>
-            <span className="block mt-2">
-              <span className="glass-text-bright font-medium text-[clamp(3.8rem,10vw,9rem)]">Shaping </span>
-              <span className="glass-text-dim font-light italic text-[clamp(3.8rem,10vw,9rem)]">futures</span>
-            </span>
+        {/* Main heading */}
+        <div className="relative">
+          <div className="hero-sparkle" />
+          <h1 className="hero-heading hero-reveal">
+            Journey Through the{' '}
+            <span className="hero-heading-underline">Universe</span>,{' '}
+            <span className="hero-heading-italic">Where Innovation Meets Design</span>
           </h1>
+        </div>
 
-          {/* Subtitle */}
-          <p className="hero-reveal glass-text-muted text-sm md:text-base max-w-md mx-auto leading-relaxed mb-14">
-            We craft premium digital experiences that transform businesses — blending technology with calm, purposeful design.
-          </p>
-
-          {/* Stats */}
-          <div className="hero-reveal flex items-center justify-center gap-4 mt-16">
-            {[
-              { value: 50, label: 'Projects', suffix: '+' },
-              { value: 30, label: 'Clients', suffix: '+' },
-              { value: 3, label: 'Years', suffix: '+' },
-            ].map((s, i) => (
-              <div key={i} className="stat-card min-w-[100px]">
-                <div className="text-2xl font-bold glass-text-bright">
-                  <span className="stat-number" data-value={s.value}>0</span>{s.suffix}
-                </div>
-                <p className="glass-text-muted text-[10px] tracking-wider mt-1 uppercase">{s.label}</p>
-              </div>
-            ))}
-          </div>
+        {/* CTAs */}
+        <div className="hero-ctas hero-reveal">
+          <a href="#contact" className="hero-cta-primary">
+            Let's talk
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+          <a href="#work" className="hero-cta-secondary">Works</a>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
-          <span className="text-[10px] glass-text-muted tracking-[0.3em] uppercase">Scroll</span>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <span className="text-[10px] text-white/20 tracking-[0.3em] uppercase">Scroll</span>
           <svg className="w-4 h-4 scroll-indicator" fill="none" stroke="rgba(139,92,246,0.5)" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7" />
           </svg>
@@ -170,56 +148,80 @@ function App() {
       </section>
 
       {/* ---- BRAND TICKER ---- */}
-      <div className="relative z-10 py-10 border-y border-white/[0.04] overflow-hidden">
+      <div className="relative z-10 py-8 border-y border-white/[0.04] overflow-hidden">
         <div className="ticker-track flex gap-16 items-center whitespace-nowrap" style={{ width: 'max-content' }}>
           {[...Array(2)].map((_, rep) =>
             ['TechCorp', 'StartupXYZ', 'InnovateCo', 'FutureAI', 'DigitalEdge', 'CloudNine', 'MetaFlow', 'QuantumLab'].map((brand, i) =>
-              <span key={`${rep}-${i}`} className="text-white/[0.08] text-lg font-bold tracking-[0.2em] uppercase">{brand}</span>
+              <span key={`${rep}-${i}`} className="text-white/[0.07] text-lg font-bold tracking-[0.2em] uppercase">{brand}</span>
             )
           )}
         </div>
       </div>
 
       {/* ============================================
-          WHY CALM
+          ABOUT SECTION
           ============================================ */}
-      <section className="why-calm-section min-h-screen flex items-center justify-center px-6 md:px-16 py-32 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="glass-text text-4xl md:text-6xl font-bold mb-16">Why Calm?</h2>
-          <div className="space-y-8 text-xl md:text-2xl font-light leading-relaxed">
-            <p>{splitChars('In a world of complexity, we strip away the noise.', 'why-calm-char')}</p>
-            <p>{splitChars('Technology should feel effortless — invisible yet powerful.', 'why-calm-char')}</p>
-            <p>{splitChars('We craft digital experiences that breathe, flow, and simply work.', 'why-calm-char')}</p>
+      <section className="about-section" id="about">
+        <div className="about-container">
+          {/* Left column */}
+          <div className="about-left">
+            <h2 className="about-tagline about-reveal">
+              A Collective of Creative Visionaries and Technical Wizards, Pioneering the Future of Design and Development
+            </h2>
+
+            <div className="about-meta about-reveal">
+              <div className="about-meta-item">
+                <span className="about-meta-label">Founded in</span>
+                <span className="about-meta-value">2018</span>
+              </div>
+              <div className="about-meta-item">
+                <span className="about-meta-label">Services</span>
+                <span className="about-meta-value">Branding, UI/UX Design, Development</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* ============================================
-          SERVICES - BENTO GRID
-          ============================================ */}
-      <section id="services" className="py-32 px-6 md:px-16 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="glass-text text-4xl md:text-7xl font-bold mb-4 text-center">What We Create</h2>
-          <p className="glass-text-muted text-center mb-16 text-lg">Transforming ideas into digital excellence</p>
-
-          <div className="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-[220px]">
+          {/* Right column - Service cards */}
+          <div className="service-cards">
             {[
-              { title: 'Websites', desc: 'Stunning, performant websites that captivate and convert.', icon: '🌐', span: 'bento-tall' },
-              { title: 'Web Apps', desc: 'Complex applications made elegantly simple.', icon: '⚡', span: '' },
-              { title: 'Mobile Apps', desc: 'Native experiences that feel natural.', icon: '📱', span: '' },
-              { title: 'AI Workflows', desc: 'Intelligent automation that streamlines everything.', icon: '🤖', span: '' },
-              { title: 'AI Integrations', desc: 'Seamlessly weaving AI into existing systems.', icon: '🔗', span: '' },
-              { title: 'AI Chatbots', desc: 'Conversations that understand and delight.', icon: '💬', span: 'bento-wide' },
-            ].map((s, i) => (
-              <div key={i} className={`service-card glass-card group p-8 flex flex-col justify-between ${s.span}`}>
-                <div>
-                  <div className="text-3xl mb-4 relative z-10">{s.icon}</div>
-                  <h3 className="glass-text-bright text-xl font-bold relative z-10 mb-2">{s.title}</h3>
-                  <p className="glass-text-dim text-sm leading-relaxed relative z-10">{s.desc}</p>
-                </div>
-                <div className="relative z-10 flex items-center gap-1 glass-text-muted text-xs mt-4 group-hover:text-white/50 transition-colors">
-                  <span>Learn more</span>
-                  <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+              {
+                icon: (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ),
+                title: 'Strategy',
+                desc: 'With a very systematic approach to digital strategy, we take products and companies to new heights.'
+              },
+              {
+                icon: (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 2l7.586 7.586" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="11" cy="11" r="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ),
+                title: 'Design',
+                desc: 'Highly appealing products, functional interfaces and superior user experiences and development.'
+              },
+              {
+                icon: (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <polyline points="16 18 22 12 16 6" strokeLinecap="round" strokeLinejoin="round" />
+                    <polyline points="8 6 2 12 8 18" strokeLinecap="round" strokeLinejoin="round" />
+                    <line x1="14" y1="4" x2="10" y2="20" strokeLinecap="round" />
+                  </svg>
+                ),
+                title: 'Development',
+                desc: 'Robust and high performing products as a result of a fusion of both the latest and proven technologies.'
+              },
+            ].map((card, i) => (
+              <div key={i} className="service-card svc-reveal">
+                <div className="service-card-icon">{card.icon}</div>
+                <div className="service-card-content">
+                  <h3 className="service-card-title">{card.title}</h3>
+                  <p className="service-card-desc">{card.desc}</p>
                 </div>
               </div>
             ))}
@@ -228,13 +230,48 @@ function App() {
       </section>
 
       {/* ============================================
+          SERVICES - BENTO GRID
+          ============================================ */}
+      <section id="capabilities" className="services-section">
+        <div className="services-section-header">
+          <h2 className="services-section-title">What We Create</h2>
+          <p className="services-section-subtitle">Transforming ideas into digital excellence</p>
+        </div>
+
+        <div className="services-bento">
+          {[
+            { title: 'Websites', desc: 'Stunning, performant websites that captivate and convert.', icon: '🌐', span: 'bento-tall' },
+            { title: 'Web Apps', desc: 'Complex applications made elegantly simple.', icon: '⚡', span: '' },
+            { title: 'Mobile Apps', desc: 'Native experiences that feel natural.', icon: '📱', span: '' },
+            { title: 'AI Workflows', desc: 'Intelligent automation that streamlines everything.', icon: '🤖', span: '' },
+            { title: 'AI Integrations', desc: 'Seamlessly weaving AI into existing systems.', icon: '🔗', span: '' },
+            { title: 'AI Chatbots', desc: 'Conversations that understand and delight.', icon: '💬', span: 'bento-wide' },
+          ].map((s, i) => (
+            <div key={i} className={`bento-card bento-reveal ${s.span}`}>
+              <div>
+                <div className="bento-card-icon">{s.icon}</div>
+                <h3 className="bento-card-title">{s.title}</h3>
+                <p className="bento-card-desc">{s.desc}</p>
+              </div>
+              <div className="bento-card-arrow">
+                <span>Learn more</span>
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ============================================
           PROCESS - HORIZONTAL SCROLL
           ============================================ */}
-      <section className="process-section h-screen overflow-hidden relative z-10">
-        <div className="process-container flex items-center h-full px-16 gap-32 relative z-10" style={{ width: 'max-content' }}>
-          <div className="flex-shrink-0 w-[50vw] flex flex-col justify-center">
-            <h2 className="glass-text text-5xl md:text-8xl font-bold mb-4">Our Process</h2>
-            <p className="glass-text-dim text-xl">Four steps to digital calm</p>
+      <section className="process-section">
+        <div className="process-container">
+          <div className="process-intro">
+            <h2 className="process-intro-title">Our Process</h2>
+            <p className="process-intro-subtitle">Four steps to digital excellence</p>
           </div>
 
           {[
@@ -243,74 +280,40 @@ function App() {
             { num: '03', title: 'BUILD', desc: 'Pixel-perfect execution with cutting-edge tech.' },
             { num: '04', title: 'DEFINE', desc: 'Launch, refine, set new standards.' },
           ].map((step, i) => (
-            <div key={i} className="flex-shrink-0 w-[70vw] h-[70vh] flex flex-col justify-center px-12 relative">
-              <span className="absolute top-8 left-12 text-[clamp(6rem,15vw,12rem)] font-extrabold text-white/[0.02] leading-none select-none">{step.num}</span>
-              <h3 className="glass-text text-6xl md:text-9xl font-extrabold mb-8">{step.title}</h3>
-              <p className="glass-text-dim text-xl max-w-lg leading-relaxed">{step.desc}</p>
-              {i < 3 && <div className="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-px bg-gradient-to-r from-purple-500/20 to-transparent" />}
+            <div key={i} className="process-step">
+              <span className="process-step-num">{step.num}</span>
+              <h3 className="process-step-title">{step.title}</h3>
+              <p className="process-step-desc">{step.desc}</p>
+              {i < 3 && <div className="process-divider" />}
             </div>
           ))}
         </div>
       </section>
 
       {/* ============================================
-          WHY INWOQ
-          ============================================ */}
-      <section id="about" className="why-section py-32 px-6 md:px-16 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="glass-text text-4xl md:text-7xl font-bold mb-16 text-center">Why INWOQ?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {[
-              { title: 'Precision Crafted', desc: 'Every pixel, every interaction — meticulously designed for perfection.' },
-              { title: 'Future Ready', desc: "Built with tomorrow's technology, for today's needs." },
-              { title: 'Seamless Integration', desc: 'Technology that adapts to you, not the other way around.' },
-              { title: 'Excellence Driven', desc: "We don't do ordinary. Every project is our masterpiece." },
-            ].map((item, i) => (
-              <div key={i} className="why-card glass-card p-8">
-                <h3 className="glass-text-bright text-2xl font-bold mb-4 relative z-10">{item.title}</h3>
-                <p className="glass-text-dim leading-relaxed relative z-10">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================
           CONTACT
           ============================================ */}
-      <section id="contact" className="contact-section py-32 px-6 md:px-16 relative z-10 min-h-screen flex items-center">
-        <div className="max-w-xl mx-auto w-full">
-          <h2 className="glass-text text-4xl md:text-6xl font-bold mb-4 text-center">
-            {splitChars("Let's Create Calm", 'contact-char')}
-          </h2>
-          <p className="glass-text-muted text-center mb-12">Ready to transform your digital presence?</p>
+      <section id="contact" className="contact-section">
+        <div className="contact-inner">
+          <h2 className="contact-title contact-reveal">Let's Create Together</h2>
+          <p className="contact-subtitle contact-reveal">Ready to bring your vision to life?</p>
 
-          <form className="space-y-5">
-            {[{ id: 'name', label: 'Your Name', type: 'text' }, { id: 'email', label: 'Email', type: 'email' }, { id: 'company', label: 'Company (Optional)', type: 'text' }].map(f =>
-              <div key={f.id} className="relative">
-                <input type={f.type} id={f.id} required={f.id !== 'company'} placeholder=" "
-                  className="glass-input w-full rounded-xl py-4 px-4 text-white outline-none peer" />
-                <label htmlFor={f.id}
-                  className="absolute left-4 top-4 text-white/20 text-sm transition-all
-                    peer-focus:-top-2 peer-focus:text-xs peer-focus:text-purple-400 peer-focus:bg-[#050010] peer-focus:px-2
-                    peer-[&:not(:placeholder-shown)]:-top-2 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:bg-[#050010] peer-[&:not(:placeholder-shown)]:px-2">
-                  {f.label}
-                </label>
-              </div>
-            )}
-            <div className="relative">
-              <textarea id="message" required placeholder=" " rows="4"
-                className="glass-input w-full rounded-xl py-4 px-4 text-white outline-none resize-none peer" />
-              <label htmlFor="message"
-                className="absolute left-4 top-4 text-white/20 text-sm transition-all
-                  peer-focus:-top-2 peer-focus:text-xs peer-focus:text-purple-400 peer-focus:bg-[#050010] peer-focus:px-2
-                  peer-[&:not(:placeholder-shown)]:-top-2 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:bg-[#050010] peer-[&:not(:placeholder-shown)]:px-2">
-                Tell us about your project
-              </label>
+          <form className="contact-form contact-reveal">
+            <div className="contact-input-wrap">
+              <input type="text" className="contact-input" placeholder="Your Name" required />
             </div>
-            <button type="submit" className="w-full py-4 rounded-full solid-button text-sm tracking-wider uppercase flex items-center justify-center gap-2 group">
+            <div className="contact-input-wrap">
+              <input type="email" className="contact-input" placeholder="Email" required />
+            </div>
+            <div className="contact-input-wrap">
+              <input type="text" className="contact-input" placeholder="Company (Optional)" />
+            </div>
+            <div className="contact-input-wrap">
+              <textarea className="contact-input" placeholder="Tell us about your project" rows="4" required />
+            </div>
+            <button type="submit" className="contact-submit">
               <span>Send Message</span>
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </button>
@@ -319,18 +322,18 @@ function App() {
       </section>
 
       {/* ---- FOOTER ---- */}
-      <footer className="py-12 px-6 md:px-16 border-t border-white/[0.04] relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+      <footer className="site-footer">
+        <div className="footer-inner">
           <div>
-            <span className="text-lg font-bold tracking-[0.15em] glass-text">INWOQ</span>
-            <p className="glass-text-muted text-xs mt-1">We make technologies calm</p>
+            <div className="footer-logo">INWOQ</div>
+            <p className="footer-tagline">Where Innovation Meets Design</p>
           </div>
-          <div className="flex gap-8 text-xs tracking-wider">
-            {['Services', 'Process', 'About', 'Contact'].map(l =>
-              <a key={l} href={`#${l.toLowerCase()}`} className="glass-text-muted hover:text-white/70 transition-colors">{l}</a>
-            )}
+          <div className="footer-links">
+            {['Work', 'Capabilities', 'About', 'Careers', 'Contact'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} className="footer-link">{l}</a>
+            ))}
           </div>
-          <p className="text-white/[0.12] text-xs">© 2026 INWOQ. All rights reserved.</p>
+          <p className="footer-copy">© 2026 INWOQ. All rights reserved.</p>
         </div>
       </footer>
     </div>
